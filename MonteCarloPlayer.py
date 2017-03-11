@@ -70,7 +70,7 @@ class MonteCarloPlayer:
                         if identifier == self.identifier:
                             self.scores[coord[1]][coord[0]] += 1
                         elif identifier == 0:
-                            return
+                            continue
                         else:
                             self.scores[coord[1]][coord[0]] -= 1
             else:
@@ -80,9 +80,15 @@ class MonteCarloPlayer:
                         if identifier == self.identifier:
                             self.scores[coord[1]][coord[0]] -= 1
                         elif identifier == 0:
-                            return
+                            continue
                         else:
                             self.scores[coord[1]][coord[0]] += 1
+
+            # If the play was already there when game started, reset score to 0
+            for y_coord, row in enumerate(self.scores[:]):
+                for x_coord, score in enumerate(row):
+                    if self.original_board.get_square(x_coord, y_coord) != 0:
+                        self.scores[y_coord][x_coord] = 0
 
     def get_best_move(self):
         """
@@ -92,8 +98,8 @@ class MonteCarloPlayer:
         best_coords = []
 
         # getting best score
-        for row in self.scores:
-            for score in row:
+        for y_coord, row in enumerate(self.scores):
+            for x_coord, score in enumerate(row):
                 if current_best is None:
                     current_best = score
                 else:
@@ -107,6 +113,11 @@ class MonteCarloPlayer:
                 if score == current_best:
                     best_coords.append((x, y))
 
+        # if current_best (in the end) is 0, it means that the move must result in a tie.
+        # In that case, simply play the last empty coordinate
+        if current_best == 0:
+            last = self.original_board.random_empty_square()
+            return (last[0], last[1])
         # returning random best move
         return random.choice(best_coords)
 
@@ -120,5 +131,6 @@ class MonteCarloPlayer:
             # resetting board for next trial
             self.board = copy.deepcopy(self.original_board)
 
+        print self.scores
 
         return self.get_best_move()
