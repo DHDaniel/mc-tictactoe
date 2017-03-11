@@ -131,6 +131,4 @@ class MonteCarloPlayer:
             # resetting board for next trial
             self.board = copy.deepcopy(self.original_board)
 
-        print self.scores
-
         return self.get_best_move()
