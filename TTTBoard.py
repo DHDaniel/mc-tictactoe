@@ -1,4 +1,6 @@
 
+
+
 import unittest
 import random
 
@@ -311,6 +313,7 @@ class TTTBoardTester(unittest.TestCase):
 
         board.play_square(1, 1, 1)
         self.assertEqual(board.random_empty_square(), None)
+
 
 
 if __name__ == '__main__':
