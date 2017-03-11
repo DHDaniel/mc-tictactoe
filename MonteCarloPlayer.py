@@ -65,24 +65,24 @@ class MonteCarloPlayer:
             # if it didn't win, then the opposite happens.
             if machine_won:
                 for horizontal in self.board.horizontals:
-                    for coord in horizontals:
+                    for coord in horizontal:
                         identifier = self.board.get_square(coord[0], coord[1])
                         if identifier == self.identifier:
-                            self.scores[coord[1], coord[0]] += 1
+                            self.scores[coord[1]][coord[0]] += 1
                         elif identifier == 0:
                             return
                         else:
-                            self.scores[coord[1], coord[0]] -= 1
+                            self.scores[coord[1]][coord[0]] -= 1
             else:
                 for horizontal in self.board.horizontals:
-                    for coord in horizontals:
+                    for coord in horizontal:
                         identifier = self.board.get_square(coord[0], coord[1])
                         if identifier == self.identifier:
-                            self.scores[coord[1], coord[0]] -= 1
+                            self.scores[coord[1]][coord[0]] -= 1
                         elif identifier == 0:
                             return
                         else:
-                            self.scores[coord[1], coord[0]] += 1
+                            self.scores[coord[1]][coord[0]] += 1
 
     def get_best_move(self):
         """
@@ -92,7 +92,7 @@ class MonteCarloPlayer:
         best_coords = []
 
         # getting best score
-        for row in scores:
+        for row in self.scores:
             for score in row:
                 if current_best is None:
                     current_best = score
@@ -101,11 +101,11 @@ class MonteCarloPlayer:
                         current_best = score
 
         # getting all coordinates that have the 'best score'
-        for y in xrange(scores):
-            for x in xrange(scores[0]):
-                score = scores[y][x]
+        for y in xrange(len(self.scores)):
+            for x in xrange(len(self.scores[0])):
+                score = self.scores[y][x]
                 if score == current_best:
-                    best_coords.append([x, y])
+                    best_coords.append((x, y))
 
         # returning random best move
         return random.choice(best_coords)
