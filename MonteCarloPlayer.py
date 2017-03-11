@@ -20,6 +20,7 @@ class MonteCarloPlayer:
         # player should be either 1 or 2
         self.player = player
         self.opponent = 2 if self.player == 1 else 1
+        self.identifier = self.board.get_identifier(self.player)
 
         self.scores = [[0 for col in self.board.horizontals[0]] for row in self.board.horizontals]
 
@@ -28,11 +29,13 @@ class MonteCarloPlayer:
         Takes in a TTTBoard and updates the internal one to the new one
         """
         self.board = copy.deepcopy(new_board)
+        self.original_board = copy.deepcopy(new_board)
         # re-setting scores
         self.scores = [[0 for col in self.board.horizontals[0]] for row in self.board.horizontals]
 
     def mc_trial(self):
         """
+        Performs a simulation of the game.
         Plays a whole game, making random moves on the board, starting with his own move. Modifies
         the internal board, doesn't return anything
         """
@@ -43,4 +46,36 @@ class MonteCarloPlayer:
             turn = not turn
 
     def mc_update_scores(self):
-        pass
+        """
+        Updates move scores based on the current state of the board
+        """
+        if self.board.is_won() == False:
+            # do nothing if game was a draw
+            return
+        else:
+            winning_player = self.board.is_won()
+            machine_won = True if winning_player == self.identifier else False
+
+            # if the machine won, then each square that the machine played in recieves a positive score
+            # and each square it did not play in recieves a negative score. Empty squares recieve 0.
+            # if it didn't win, then the opposite happens.
+            if machine_won:
+                for horizontal in self.board.horizontals:
+                    for coord in horizontals:
+                        identifier = self.board.get_square(coord[0], coord[1])
+                        if identifier == self.identifier:
+                            self.scores[coord[1], coord[0]] += 1
+                        elif identifier == 0:
+                            return
+                        else:
+                            self.scores[coord[1], coord[0]] -= 1
+            else:
+                for horizontal in self.board.horizontals:
+                    for coord in horizontals:
+                        identifier = self.board.get_square(coord[0], coord[1])
+                        if identifier == self.identifier:
+                            self.scores[coord[1], coord[0]] -= 1
+                        elif identifier == 0:
+                            return
+                        else:
+                            self.scores[coord[1], coord[0]] += 1

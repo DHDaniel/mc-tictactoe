@@ -189,6 +189,17 @@ class TTTBoard:
         except:
             return False
 
+    def get_identifier(self, player_num):
+        """
+        Returns the symbol that identifies the player in the specific board.
+        """
+        if player_num > 2 or player_num < 1:
+            raise ValueError("Player must be either 1 or 2.")
+
+        if player_num == 1:
+            return self.player_1
+        else:
+            return self.player_2
 
 #####################
 # TESTING CLASS
