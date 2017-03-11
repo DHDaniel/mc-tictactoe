@@ -1,5 +1,6 @@
 
 import copy
+import random
 
 class MonteCarloPlayer:
 
@@ -79,3 +80,29 @@ class MonteCarloPlayer:
                             return
                         else:
                             self.scores[coord[1], coord[0]] += 1
+
+    def get_best_move(self):
+        """
+        Returns a random best move using the scores for each one.
+        """
+        current_best = None
+        best_coords = []
+
+        # getting best score
+        for row in scores:
+            for score in row:
+                if current_best is None:
+                    current_best = score
+                else:
+                    if score > current_best:
+                        current_best = score
+
+        # getting all coordinates that have the 'best score'
+        for y in xrange(scores):
+            for x in xrange(scores[0]):
+                score = scores[y][x]
+                if score == current_best:
+                    best_coords.append([x, y])
+
+        # returning random best move
+        return random.choice(best_coords)
