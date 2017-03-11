@@ -4,10 +4,11 @@ import random
 
 class MonteCarloPlayer:
 
-    def __init__(self, TTT_board, player):
+    def __init__(self, TTT_board, player, num_trials):
         """
         Initialises a machine player which chooses moves based on Monte Carlo simulations.
         TTT_board should be of the class TTTBoard
+        num_trials is the desired number of trials to use in the Monte Carlo simulations
         """
         try:
             TTT_board.get_square(0, 0)
@@ -22,6 +23,8 @@ class MonteCarloPlayer:
         self.player = player
         self.opponent = 2 if self.player == 1 else 1
         self.identifier = self.board.get_identifier(self.player)
+
+        self.trials = num_trials
 
         self.scores = [[0 for col in self.board.horizontals[0]] for row in self.board.horizontals]
 
@@ -106,3 +109,16 @@ class MonteCarloPlayer:
 
         # returning random best move
         return random.choice(best_coords)
+
+    def move(self):
+
+        for i in xrange(self.trials):
+            # running one trial and updating board scores
+            self.mc_trial()
+            self.mc_update_scores()
+
+            # resetting board for next trial
+            self.board = copy.deepcopy(self.original_board)
+
+
+        return self.get_best_move()
