@@ -14,7 +14,7 @@ machine_number = 2 if player_number == 1 else 1
 
 
 # printing rules
-print "When it is your turn, you will be prompted to enter two numbers, separated by spaces. They are the x and y coordinates that you wish to play in, the top-left square being '0 0' and the bottom-right square being '3 3'. The x coordinate goes from left-to-right, the y coordinate goes from top-to-bottom.\n\n"
+print "When it is your turn, you will be prompted to enter two numbers, separated by spaces. They are the x and y coordinates that you wish to play in, the top-left square being '0 0' and the bottom-right square being '2 2'. The x coordinate goes from left-to-right, the y coordinate goes from top-to-bottom.\n\n"
 
 board = TTTBoard(3, "X", "O")
 mc_player = MonteCarloPlayer(board, machine_number, int(sys.argv[1]))
